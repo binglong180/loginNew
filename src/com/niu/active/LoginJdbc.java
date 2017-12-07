@@ -3,17 +3,7 @@ package com.niu.active;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
-/**
- * 
- * 修改一！
- * 
- * @author 牛牛牛！！！牛牛！！牛！
- *
- * @date 2017-12-7
- *
- * @version 
- *
- */
+//修改一下
 public class LoginJdbc {
 	static Scanner input = new Scanner(System.in);
 

@@ -3,8 +3,8 @@ package com.niu.active;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
-//修改一下
-public class LoginJdbc {
+
+public class LoginJdbc extends BaseDao{
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -15,14 +15,15 @@ public class LoginJdbc {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 
 	 * 一级菜单！
 	 * 
 	 * @author 牛牛
-	 *
+	 * 
 	 * @date 2017-12-7
-	 *
+	 * 
 	 * @throws SQLException
 	 */
 	private static void menu() throws SQLException {
@@ -43,14 +44,15 @@ public class LoginJdbc {
 			break;
 		}
 	}
+
 	/**
 	 * 
 	 * 二级菜单！
 	 * 
 	 * @author 牛牛
-	 *
+	 * 
 	 * @date 2017-12-7
-	 *
+	 * 
 	 * @param loginName
 	 * @throws SQLException
 	 */
@@ -72,10 +74,10 @@ public class LoginJdbc {
 			break;
 		}
 	}
+
 	private static void delet(String loginName) throws SQLException {
-		String sql="DELETE FROM easybuy_user WHERE loginName=?;";
-		BaseDao bd = new BaseDao();
-		int num=bd.update(sql,loginName);
+		String sql = "DELETE FROM easybuy_user WHERE loginName=?;";
+		int num = update(sql, loginName);
 		if (num > 0) {
 			System.out.println("删除成功");
 		} else {
@@ -93,9 +95,8 @@ public class LoginJdbc {
 		String password = input.next();
 		System.out.println("请输入性别1男0女");
 		int sex = input.nextInt();
-		String sql="UPDATE easybuy_user SET loginName=?,userName=?,password=?,sex=? WHERE loginName=?;";
-		BaseDao bd = new BaseDao();
-		int num=bd.update(sql, newloginName,userName,password,sex,loginName);
+		String sql = "UPDATE easybuy_user SET loginName=?,userName=?,password=?,sex=? WHERE loginName=?;";
+		int num = update(sql, newloginName, userName, password, sex,loginName);
 		if (num > 0) {
 			System.out.println("修改成功");
 		} else {
@@ -103,28 +104,35 @@ public class LoginJdbc {
 		}
 		menu();
 	}
+
 	private static void login() throws SQLException {
 		System.out.println("**********登录界面*********");
 		System.out.println("请输入登录名");
 		String loginName = input.next();
 		System.out.println("请输入密码");
 		String password = input.next();
-		String sql = "SELECT loginName,PASSWORD,id,sex,userName FROM easybuy_user WHERE loginName=? AND PASSWORD=?;";
-		BaseDao bd = new BaseDao();
-		ResultSet query = bd.query(sql,loginName,password);
-		if (query !=null) {
-			System.out.println("登录成功");
-		} else {
-			System.out.println("登录失败");
+		String sql = "SELECT loginName,PASSWORD,id,sex,userName FROM easybuy_user where loginName=? and password=?;";
+		ResultSet query = query(sql,loginName,password);
+		boolean flag = false;
+		while (query.next()) {
+//			if (query.getString("loginName").equals(loginName)
+//					&& query.getString("loginName").equals(password)) {
+				flag = true;
+				System.out.println("登录成功！");
+				System.out.println("id：" + query.getInt("id"));
+				System.out.println("登录名：" + query.getString("loginName"));
+				System.out.println("真实名：" + query.getString("userName"));
+				System.out.println("性别：" + query.getInt("sex"));
+				closeAll(null, null, query);
+				second(loginName);// 二级菜单
+//			}
 		}
-		while(query.next()){
-			System.out.println("id："+query.getInt("id"));
-			System.out.println("登录名："+query.getString("loginName"));
-			System.out.println("真实名："+query.getString("userName"));
-			System.out.println("性别："+query.getInt("sex"));
+		if (!flag) {
+			System.out.println("登录失败！");
+			menu();
 		}
-		//二级菜单
-		second(loginName);
+		
+		
 	}
 
 	private static void resigter() throws SQLException {
@@ -139,9 +147,8 @@ public class LoginJdbc {
 		int sex = input.nextInt();
 		String sql = "INSERT INTO easybuy_user(loginName,userName,password,sex)VALUES(?,?,?,?);";
 		int num = 0;
-		BaseDao bd = new BaseDao();
 		try {
-			num = bd.update(sql, loginName, userName, password, sex);
+			num =update(sql, loginName, userName, password, sex);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,2 +1,3 @@
 # loginNew
-xinde 
+Properties单例模式修改优化
+这次是将Properties文件引入项目中将JDBC需要的driver、URL、username、password配置在Properties中然后使用单例模式加载到项目中
